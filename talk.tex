@@ -1,0 +1,228 @@
+\documentclass[12pt]{beamer}
+
+\usecolortheme[light,accent=blue]{solarized}
+\setbeamercovered{transparent=0}
+\setbeamertemplate{navigation symbols}{} % remove navigation symbols
+% \setbeamertemplate{footline}[page number]
+\setbeamertemplate{footline}{
+  \hfill%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \setbeamertemplate{page number in head/foot}[framenumber]%
+  \usebeamertemplate*{page number in head/foot}\kern1em\vskip2pt%
+}
+\setbeamerfont{page number in head/foot}{size=\small}
+\setbeamerfont{note page}{size=\scriptsize}
+\addtobeamertemplate{note page}{\setbeamerfont{itemize/enumerate subbody}{size=\tiny}}{}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+
+\usepackage[english]{babel}
+% \usepackage{times}
+% \usepackage{esvect}\renewcommand{\vec}[1]{\vv{#1}}
+% \usepackage{setspace}\setstretch{1.5}
+\usepackage{tikz}
+\usepackage{pgfplots}\pgfplotsset{compat=1.17}
+\usepackage{siunitx}
+\usepackage[backend=biber,natbib=true,style=numeric,sorting=none]{biblatex}
+% \usepackage{multimedia}
+
+\addbibresource{talk.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetikzlibrary{calc,decorations.markings,decorations.pathmorphing,positioning,shapes,scopes}
+
+\tikzset{
+  >=latex,
+  ->-/.style={postaction={decorate},decoration={%
+      markings,mark=at position #1 with {\arrow{>}}%
+    }%
+  },%
+  ->-/.default=.5,
+  -<-/.style={postaction={decorate},decoration={%
+      markings,mark=at position #1 with {\arrowreversed{>}}%
+    }%
+  },%
+    -<-/.default=.5,
+  % use option [visible on=<+->] to uncover parts of a tikzpicture
+  invisible/.style={opacity=0},
+  visible on/.style={alt=#1{}{invisible}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+  photon/.style={decorate, decoration={snake, segment length=3mm, amplitude=0.8mm}},
+}
+
+% arrows on the field lines
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+  mark=at position .2 with {\arrowreversed[scale=1.5]{>}},
+  mark=at position .8 with {\arrowreversed[scale=1.5]{>}}}}]
+
+% field lines
+\tikzstyle fLines=[thick,directed]
+
+\tikzset{xcenter around/.style 2 args={execute at end picture={%
+  \useasboundingbox let \p0 = (current bounding box.south west), \p1 = (current bounding box.north east),
+                        \p2 = (#1), \p3 = (#2)
+                    in
+        ({min(\x2 + \x3 - \x1,\x0)},\y0) rectangle ({max(\x3 + \x2 - \x0,\x1)},\y1);
+}}}
+
+\newcommand{\CXX}{\texttt{C++}}
+\newcommand{\FORTRAN}{\texttt{FORTRAN}}
+\newcommand{\FlexibleSUSY}{\texttt{FlexibleSUSY}}
+\newcommand{\HiggsTools}{\texttt{HiggsTools}}
+\newcommand{\Lagr}{\mathcal{L}}
+\newcommand{\micrOMEGAs}{\texttt{micrOMEGAs}}
+\newcommand{\SARAH}{\texttt{SARAH}}
+\newcommand{\SPheno}{\texttt{SPheno}}
+
+\newcommand{\SMtable}{%
+    \begin{tikzpicture}[node distance = 2.5em, auto]
+      \node[quark] (u) {$u$};
+      \node[quark, below of=u] (d) {$d$};
+      \node[quark, right of=u] (c) {$c$};
+      \node[quark, below of=c] (s) {$s$};
+      \node[quark, right of=c] (t) {$t$};
+      \node[quark, below of=t] (b) {$b$};
+      \node[lepton, below of=d] (ne) {$\nu_e$};
+      \node[lepton, below of=ne] (e) {$e$};
+      \node[lepton, right of=ne] (nm) {$\nu_\mu$};
+      \node[lepton, below of=nm] (m) {$\mu$};
+      \node[lepton, right of=nm] (nt) {$\nu_\tau$};
+      \node[lepton, below of=nt] (ta) {$\tau$};
+      \node[gauge, right of=t] (gamma) {$\gamma$};
+      \node[gauge, below of=gamma] (g) {$g$};
+      \node[gauge, below of=g] (Z) {$Z$};
+      \node[gauge, below of=Z] (W) {$W$};
+      \node[scalar, right of=W] (H) {$h$};
+      \node[rotate=90] (quarks)  at ($(u)!0.5!(d)+(-1,0)$)  {quarks};
+      \node[rotate=90] (leptons) at ($(ne)!0.5!(e)+(-1,0)$) {leptons};
+      \node[below of=H] (higgs) {Higgs};
+      \node[above of=gamma, align=center] (gauge) {gauge\\[-0.5em] bosons};
+    \end{tikzpicture}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tikzstyle{block} = [rectangle, draw, text width=7em, text centered, minimum height=2em]
+
+\tikzstyle{quark}     = [rectangle, black, draw, fill=yellow, minimum width=2em, text centered, minimum height=2em]
+\tikzstyle{lepton}    = [rectangle, black, draw, fill=red!50, minimum width=2em, text centered, minimum height=2em]
+\tikzstyle{gauge}     = [circle   , black, draw, fill=green , minimum size=2em, inner sep=0pt, text centered]
+\tikzstyle{scalar}    = [diamond  , black, draw, fill=blue!40, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
+\tikzstyle{goldstone} = [diamond  , black, draw, dashed, fill=blue!30, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
+\tikzstyle{squark}    = [diamond  , black, draw, fill=yellow, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
+\tikzstyle{slepton}   = [diamond  , black, draw, fill=red!50, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
+\tikzstyle{gaugino}   = [rectangle, black, draw, fill=green , minimum size=2em, inner sep=0pt, text centered]
+\tikzstyle{higgsino}  = [rectangle, black, draw, fill=blue!40  , minimum width=2em, text centered, minimum height=2em]
+\tikzstyle{inert}     = [diamond  , black, draw, fill=teal!80, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
+\tikzstyle{inertino}  = [rectangle, black, draw, fill=teal!80, minimum width=2em, text centered, minimum height=2em]
+\tikzstyle{phantom}   = [rectangle, black, minimum width=2em, text centered, minimum height=2em]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\Exp}{\text{Exp}}
+\newcommand{\SM}{\text{SM}}
+
+\definecolor{red}{rgb}{1.0,0.2,0.2}
+\definecolor{blue}{rgb}{0,0.7,1.0}
+\definecolor{green}{rgb}{0,1.0,0.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Tools for HEP}
+\subtitle{From $\Lagr$ to Observables}
+
+\author[Voigt]{Alexander Voigt}
+\institute[RWTH Aachen]{RWTH Aachen}
+\date{Workshop on ``Selected topics on future directions in particle physics'', Warsaw 2024}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Overview}
+
+\begin{frame}{}
+  \begin{center}
+    \begin{tikzpicture}[node distance=1.5em, auto]
+      \node[block] (L) { Lagrangian $\Lagr$ };
+      \node[block, below=of L] (E) { expressions for vertices, $M_f$, $\Sigma_f$, $\beta_i$, \ldots };
+      \node[block, left=of E] (S) { \SPheno };
+      \node[block, below=of S] (SO) { values for $m_f$, $\Gamma$, $a_\mu$, \ldots };
+      \node[block, right=of E] (F) { \FlexibleSUSY };
+      \node[block, below=of F] (FO) { values for $m_f$, $\Gamma$, $a_\mu$, \ldots };
+      \node[block, below=2cm of E] (O) { \micrOMEGAs, \HiggsTools, \ldots };
+      \node[block, below=of O] (O2) { values for $\Omega h^2$, $\chi^2$, \ldots };
+      \draw[->] (L) -- node[right] { \SARAH } (E);
+      \draw[->] (E) -- (S);
+      \draw[->] (E) -- (F);
+      \draw[->] (S) -- (SO);
+      \draw[->] (F) -- (FO);
+      \draw[->] (SO) |- (O);
+      \draw[->] (FO) |- (O);
+      \draw[->] (E) -- (O);
+      \draw[->] (O) -- (O2);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\note{
+  \begin{itemize}
+  \item Start with picture of the galaxy cluster ``Abell 1689'' from the Hubble telescope
+  \item look closely: you'll see a gravity lens effect
+  \item So, there must be some massive object(s) between the galaxy
+    cluster and us.
+  \item If one counts the number of visible objects (stars), one finds
+    that (assuming ART is correct), the cumulative mass of the stars
+    is not enough to explain this gravity lens effect.
+  \item So, there must be some invisible massive matter between the
+    galaxy cluster and us. This is what astronomers and cosmologists
+    call ``Dark Matter''.
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{The Standard Model}
+
+\begin{frame}{\insertsection}
+  \begin{center}
+    \SMtable
+  \end{center}
+\end{frame}
+
+\note{
+  \begin{itemize}
+  \item To calculate the quantum corrections we have to take into
+    account all known particles.
+  \item All known particles and their interactions are described by
+    the SM.
+  \item So, to predict $g_e$ one must take into account all known
+    particles from the SM which make up the ``sea'' of virtual
+    particles.
+  \item The known particles described by the SM are: Electron, Muon,
+    Tau, Quarks, Gauge bosons and Higgs boson.
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[allowframebreaks]{References}
+  \printbibliography
+\end{frame}
+
+\end{document}
