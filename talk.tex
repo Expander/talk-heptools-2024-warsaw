@@ -1,8 +1,9 @@
-\documentclass[12pt]{beamer}
+\documentclass[11pt]{beamer}
 
 \usecolortheme[light,accent=blue]{solarized}
 \setbeamercovered{transparent=0}
 \setbeamertemplate{navigation symbols}{} % remove navigation symbols
+\setbeamertemplate{section in toc}[sections numbered] % numbered sections
 % \setbeamertemplate{footline}[page number]
 \setbeamertemplate{footline}{
   \hfill%
@@ -20,8 +21,12 @@
 % \usepackage{times}
 % \usepackage{esvect}\renewcommand{\vec}[1]{\vv{#1}}
 % \usepackage{setspace}\setstretch{1.5}
+\usepackage{amsmath,amssymb}
+\usepackage{physics}
+\usepackage{slashed}
 \usepackage{tikz}
 \usepackage{pgfplots}\pgfplotsset{compat=1.17}
+\usepackage{listings}
 \usepackage{siunitx}
 \usepackage[backend=biber,natbib=true,style=numeric,sorting=none]{biblatex}
 % \usepackage{multimedia}
@@ -68,11 +73,39 @@
         ({min(\x2 + \x3 - \x1,\x0)},\y0) rectangle ({max(\x3 + \x2 - \x0,\x1)},\y1);
 }}}
 
+\lstset{ 
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\footnotesize\ttfamily,        % the size of the fonts that are used for the code
+  breaklines=true,                 % sets automatic line breaking
+  stepnumber=1,
+  prebreak=\textbackslash,
+  commentstyle=\color{gray},       % comment style
+  % deletekeywords={...},            % if you want to delete keywords from the given language
+  % escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  % extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  morekeywords={wget},             % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{gray},   % the style that is used for the line-numbers
+  rulecolor=\color{gray},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  % stringstyle=\color{red},         % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+}
+
 \newcommand{\CXX}{\texttt{C++}}
 \newcommand{\FORTRAN}{\texttt{FORTRAN}}
 \newcommand{\FlexibleSUSY}{\texttt{FlexibleSUSY}}
 \newcommand{\HiggsTools}{\texttt{HiggsTools}}
+\newcommand{\ii}{\text{i}}
+\newcommand{\hc}{\text{h.c.}}
 \newcommand{\Lagr}{\mathcal{L}}
+\newcommand{\Lagrin}{\mathcal{L}_{\text{int}}}
 \newcommand{\micrOMEGAs}{\texttt{micrOMEGAs}}
 \newcommand{\SARAH}{\texttt{SARAH}}
 \newcommand{\SPheno}{\texttt{SPheno}}
@@ -156,7 +189,7 @@
 
 \section{Overview}
 
-\begin{frame}{}
+\begin{frame}{Overview}
   \begin{center}
     \begin{tikzpicture}[node distance=1.5em, auto]
       \node[block] (L) { Lagrangian $\Lagr$ };
@@ -165,7 +198,7 @@
       \node[block, below=of S] (SO) { values for $m_f$, $\Gamma$, $a_\mu$, \ldots };
       \node[block, right=of E] (F) { \FlexibleSUSY };
       \node[block, below=of F] (FO) { values for $m_f$, $\Gamma$, $a_\mu$, \ldots };
-      \node[block, below=2cm of E] (O) { \micrOMEGAs, \HiggsTools, \ldots };
+      \node[block, below=4em of E] (O) { \micrOMEGAs, \HiggsTools, \ldots };
       \node[block, below=of O] (O2) { values for $\Omega h^2$, $\chi^2$, \ldots };
       \draw[->] (L) -- node[right] { \SARAH } (E);
       \draw[->] (E) -- (S);
@@ -197,27 +230,136 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{The Standard Model}
+\section{Setup}
+\subsection{Mathematica}
 
-\begin{frame}{\insertsection}
-  \begin{center}
-    \SMtable
-  \end{center}
+\begin{frame}[fragile]{\insertsection\ -- Mathematica}
+  \begin{enumerate}
+  \item Get a free licence for WolframEngine:
+    \begin{center}
+      \url{https://www.wolfram.com/engine/free-license/}
+    \end{center}
+  \item Download an install WolframEngine 14.1 from:
+    \begin{center}
+      \url{https://www.wolfram.com/engine/}
+    \end{center}
+  \item Ensure the Wolfram Language Kernel can be called from the
+    command line by running \texttt{math}:
+    \begin{lstlisting}[language=sh]
+$PATH=$PATH:/usr/local/Wolfram/WolframEngine/14.1/Executables/\end{lstlisting}
+  \item Test it:
+    \begin{lstlisting}
+math -run "Print[Hello World]; Quit[]"\end{lstlisting}
+  \end{enumerate}
 \end{frame}
 
-\note{
-  \begin{itemize}
-  \item To calculate the quantum corrections we have to take into
-    account all known particles.
-  \item All known particles and their interactions are described by
-    the SM.
-  \item So, to predict $g_e$ one must take into account all known
-    particles from the SM which make up the ``sea'' of virtual
-    particles.
-  \item The known particles described by the SM are: Electron, Muon,
-    Tau, Quarks, Gauge bosons and Higgs boson.
-  \end{itemize}
-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{SARAH}
+
+\begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
+  \textbf{Goal:} The following command should work:
+  \begin{lstlisting}
+math -run "<< SARAH\`"\end{lstlisting}
+  It should print (or similar):
+  \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+Wolfram Language 14.1.0 Engine for Linux x86 (64-bit)
+Copyright 1988-2023 Wolfram Research, Inc.
+
+SARAH 4.15.2
+by Florian Staub, Mark Goodsell and Werner Porod, 2020
+contributions by M. Gabelmann, K. Nickel\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
+  \textbf{Method 1:} automatic download and installation:
+  \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
+wget https://raw.githubusercontent.com/FlexibleSUSY/FlexibleSUSY/development/install-sarah
+chmod +x install-sarah
+./install-sarah --flavour=WolframEngine\end{lstlisting}
+  \textbf{Method 2:} manual download:
+  \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
+cd ~/.WolframEngine/Applications
+wget https://sarah.hepforge.org/downloads/SARAH-4.15.2.tar.gz
+tar -xf SARAH-4.15.2.tar.gz
+ln -s SARAH-4.15.2 SARAH\end{lstlisting}
+  and installation:
+  \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
+cd ~/.WolframEngine/Kernel
+echo "AppendTo[\$Path, \"$HOME/.WolframEngine/Applications/SARAH\"];" >> init.m
+\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Compilers and Libraries}
+
+\begin{frame}[fragile]{\insertsection\ -- compilers and libraries}
+  \textbf{Requirements:} \CXX\ compiler, \FORTRAN\ compiler, BOOST
+  library, Eigen3 library, GNU Scientific Library
+
+  \bigskip
+
+  Installation on \textbf{Ubuntu}:
+  \begin{lstlisting}[language=sh]
+sudo apt install gcc g++ gfortran libboost-dev libeigen3-dev libgsl-dev dpkg-dev\end{lstlisting}
+  %
+  Installation on \textbf{MacOS}:
+  \begin{lstlisting}[language=sh]
+brew install gcc boost eigen gsl\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{FlexibleSUSY}
+
+\begin{frame}[fragile]{\insertsection\ -- \FlexibleSUSY}
+  \begin{lstlisting}[language=sh]
+wget https://flexiblesusy.hepforge.org/downloads/FlexibleSUSY-2.8.0.tar.gz
+tar -xf FlexibleSUSY-2.8.0.tar.gz
+cd FlexibleSUSY-2.8.0\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Standard Model}
+
+\begin{frame}{\insertsection\ (SM)}
+  Interaction Lagrangian in terms of Weyl 2-Spinors:
+  \begin{align*}
+    \Lagrin
+    &= \qty[-Y^d_{ij} H_a^* d_iq_{aj} - Y^e_{ij} H_a^* e_i\ell_{aj} - Y^u_{ij} u_iq_{aj}H_a + \hc] \\
+    &\phantom{=}{} -\mu^2 H_a^* H_a - \frac{1}{2} (H_a^* H_a)^2
+  \end{align*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection}
+  Create and build the SM spectrum generator:
+  \begin{lstlisting}
+./createmodel -f --name=SM
+./configure --with-models=SM
+make -j4\end{lstlisting}
+  Run it:
+  \begin{lstlisting}
+./models/SM/run_SM.x --slha-input-file=models/SM/LesHouches.in.SM\end{lstlisting}
+
+%   \begin{lstlisting}
+% wget https://github.com/FlexibleSUSY/FlexibleSUSY/releases/download/v2.8.0/SM.tar.gz
+% tar xf SM.tar.gz
+% ./configure --with-models=SM --disable-meta
+% make -j4\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Standard Model + S}
+
+\begin{frame}{\insertsection}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
