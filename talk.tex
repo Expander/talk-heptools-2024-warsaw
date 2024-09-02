@@ -288,7 +288,7 @@ ln -s SARAH-4.15.2 SARAH\end{lstlisting}
   and installation:
   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
 cd ~/.WolframEngine/Kernel
-echo "AppendTo[\$Path, \"$HOME/.WolframEngine/Applications/SARAH\"];" >> init.m
+echo 'AppendTo[$Path, FileNameJoin[{$HomeDirectory, ".WolframEngine", "Applications", "SARAH"}]];' >> init.m
 \end{lstlisting}%$
 \end{frame}
 
