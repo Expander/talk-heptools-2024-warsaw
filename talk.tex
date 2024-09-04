@@ -106,6 +106,8 @@
 \newcommand{\hc}{\text{h.c.}}
 \newcommand{\Lagr}{\mathcal{L}}
 \newcommand{\Lagrin}{\mathcal{L}_{\text{int}}}
+\newcommand{\LoopTools}{\texttt{LoopTools}}
+\newcommand{\Mathematica}{\texttt{Mathematica}}
 \newcommand{\micrOMEGAs}{\texttt{micrOMEGAs}}
 \newcommand{\SARAH}{\texttt{SARAH}}
 \newcommand{\SPheno}{\texttt{SPheno}}
@@ -230,128 +232,308 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Setup}
-\subsection{Mathematica}
+% \section{Setup}
+% \subsection{Mathematica}
 
-\begin{frame}[fragile]{\insertsection\ -- Mathematica}
+% \begin{frame}[fragile]{\insertsection\ -- Mathematica}
+%   \begin{enumerate}
+%   \item Get a free licence for WolframEngine:
+%     \begin{center}
+%       \url{https://www.wolfram.com/engine/free-license/}
+%     \end{center}
+%   \item Download an install WolframEngine 14.1 from:
+%     \begin{center}
+%       \url{https://www.wolfram.com/engine/}
+%     \end{center}
+%   \item Ensure the Wolfram Language Kernel can be called from the
+%     command line by running \texttt{math}:
+%     \begin{lstlisting}[language=sh]
+% $PATH=$PATH:/usr/local/Wolfram/WolframEngine/14.1/Executables/\end{lstlisting}
+%   \item Test it:
+%     \begin{lstlisting}
+% math -run "Print[Hello World]; Quit[]"\end{lstlisting}
+%   \end{enumerate}
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \subsection{SARAH}
+
+% \begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
+%   \textbf{Goal:} The following command should work:
+%   \begin{lstlisting}
+% math -run "<< SARAH\`"\end{lstlisting}
+%   It should print (or similar):
+%   \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+% Wolfram Language 14.1.0 Engine for Linux x86 (64-bit)
+% Copyright 1988-2023 Wolfram Research, Inc.
+
+% SARAH 4.15.2
+% by Florian Staub, Mark Goodsell and Werner Porod, 2020
+% contributions by M. Gabelmann, K. Nickel\end{lstlisting}
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
+%   \textbf{Method 1:} automatic download and installation:
+%   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
+% wget https://raw.githubusercontent.com/FlexibleSUSY/FlexibleSUSY/development/install-sarah
+% chmod +x install-sarah
+% ./install-sarah --flavour=WolframEngine\end{lstlisting}
+%   \textbf{Method 2:} manual download:
+%   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
+% cd ~/.WolframEngine/Applications
+% wget https://sarah.hepforge.org/downloads/SARAH-4.15.2.tar.gz
+% tar -xf SARAH-4.15.2.tar.gz
+% ln -s SARAH-4.15.2 SARAH\end{lstlisting}
+%   and installation:
+%   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
+% cd ~/.WolframEngine/Kernel
+% echo 'AppendTo[$Path, FileNameJoin[{$HomeDirectory, ".WolframEngine", "Applications", "SARAH"}]];' >> init.m
+% \end{lstlisting}%$
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \subsection{Compilers and Libraries}
+
+% \begin{frame}[fragile]{\insertsection\ -- compilers and libraries}
+%   \textbf{Requirements:} \CXX\ compiler, \FORTRAN\ compiler, BOOST
+%   library, Eigen3 library, GNU Scientific Library
+
+%   \bigskip
+
+%   Installation on \textbf{Ubuntu}:
+%   \begin{lstlisting}[language=sh]
+% sudo apt install gcc g++ gfortran libboost-dev libeigen3-dev libgsl-dev dpkg-dev\end{lstlisting}
+%   %
+%   Installation on \textbf{MacOS}:
+%   \begin{lstlisting}[language=sh]
+% brew install gcc boost eigen gsl\end{lstlisting}
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \subsection{FlexibleSUSY}
+
+% \begin{frame}[fragile]{\insertsection\ -- \FlexibleSUSY}
+%   \begin{lstlisting}[language=sh]
+% wget https://flexiblesusy.hepforge.org/downloads/FlexibleSUSY-2.8.0.tar.gz
+% tar -xf FlexibleSUSY-2.8.0.tar.gz
+% cd FlexibleSUSY-2.8.0\end{lstlisting}%$
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Standard Model}
+
+% \begin{frame}{\insertsection\ (SM)}
+%   Interaction Lagrangian in terms of Weyl 2-Spinors:
+%   \begin{align*}
+%     \Lagrin
+%     &= \qty[-Y^d_{ij} H_a^* d_iq_{aj} - Y^e_{ij} H_a^* e_i\ell_{aj} - Y^u_{ij} u_iq_{aj}H_a + \hc] \\
+%     &\phantom{=}{} -\mu^2 H_a^* H_a - \frac{1}{2} (H_a^* H_a)^2
+%   \end{align*}
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- What we will do}
   \begin{enumerate}
-  \item Get a free licence for WolframEngine:
-    \begin{center}
-      \url{https://www.wolfram.com/engine/free-license/}
-    \end{center}
-  \item Download an install WolframEngine 14.1 from:
-    \begin{center}
-      \url{https://www.wolfram.com/engine/}
-    \end{center}
-  \item Ensure the Wolfram Language Kernel can be called from the
-    command line by running \texttt{math}:
-    \begin{lstlisting}[language=sh]
-$PATH=$PATH:/usr/local/Wolfram/WolframEngine/14.1/Executables/\end{lstlisting}
-  \item Test it:
-    \begin{lstlisting}
-math -run "Print[Hello World]; Quit[]"\end{lstlisting}
+  \item Inspect the \SARAH\ model files and generate some analytic
+    expressions
+  \item Create a \SPheno\ spectrum generator 
+  \item Create a \FlexibleSUSY-2\ spectrum generator 
   \end{enumerate}
+  Reference: \url{https://sarah.hepforge.org/}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{SARAH}
 
-\begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
-  \textbf{Goal:} The following command should work:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- inspect model files}
+  Let's inspect the following \SARAH\ files:
+  \begin{itemize}
+  \item \texttt{SARAH/Models/SM/SM.m}\\ Definitions of the gauge
+    group, fields, Lagrangian, VEVs, field mixings, \ldots
+  \item \texttt{SARAH/Models/SM/particles.m}\\
+    Definitions of properties of the fields (output name, \LaTeX\
+    name, PDG number, FeynArts number, \ldots)
+  \item \texttt{SARAH/Models/SM/parameters.m}\\
+    Definitions of information about the model parameters (Output
+    name, \LaTeX\ name, SLHA output block, \ldots)
+  \end{itemize}
+  \bigskip
+
+  References: \url{https://sarah.hepforge.org/}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- inspect model properties}
+  Let's start \SARAH\ and inspect some model properties.
+  
+  Go to \texttt{$\sim$/hep-software/SARAH}:
   \begin{lstlisting}
-math -run "<< SARAH\`"\end{lstlisting}
-  It should print (or similar):
-  \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
-Wolfram Language 14.1.0 Engine for Linux x86 (64-bit)
-Copyright 1988-2023 Wolfram Research, Inc.
-
-SARAH 4.15.2
-by Florian Staub, Mark Goodsell and Werner Porod, 2020
-contributions by M. Gabelmann, K. Nickel\end{lstlisting}
+$ cd ~/hep-software/SARAH\end{lstlisting}%$
+  %
+  Start \Mathematica:
+  \begin{lstlisting}
+$ math\end{lstlisting}%$
+  %
+  Run
+  %
+  \begin{lstlisting}
+In[]:= << SARAH`
+In[]:= << Start["SM"]
+In[]:= SARAH`Commands (* show some available commands *)\end{lstlisting}
+  %
+  Let's inspect some model properties:
+  %
+  \begin{lstlisting}
+In[]:= SARAHparameters (* parameters *)
+In[]:= Particles[EWSB] (* fields after EWSB *)
+In[]:= MassMatrix[Fe]  (* mass matrix of Fe *)
+In[]:= Vertex[{bar[Fe],Fe,VP}] (* a vertex *)\end{lstlisting}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
-  \textbf{Method 1:} automatic download and installation:
-  \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
-wget https://raw.githubusercontent.com/FlexibleSUSY/FlexibleSUSY/development/install-sarah
-chmod +x install-sarah
-./install-sarah --flavour=WolframEngine\end{lstlisting}
-  \textbf{Method 2:} manual download:
-  \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
-cd ~/.WolframEngine/Applications
-wget https://sarah.hepforge.org/downloads/SARAH-4.15.2.tar.gz
-tar -xf SARAH-4.15.2.tar.gz
-ln -s SARAH-4.15.2 SARAH\end{lstlisting}
-  and installation:
-  \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
-cd ~/.WolframEngine/Kernel
-echo 'AppendTo[$Path, FileNameJoin[{$HomeDirectory, ".WolframEngine", "Applications", "SARAH"}]];' >> init.m
-\end{lstlisting}%$
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- generate some expressions}
+  Let's  generate some analytic expressions.
+  %
+  \begin{lstlisting}
+In[]:= MakeAll[] (* generate all expressions *)
+In[]:= Quit[] (* quit *)\end{lstlisting}
+  %
+  The expressions are written to the \texttt{Output/SM/} sub-directory.
+
+  \medskip
+
+  Vertices (fermion--fermion--gauge boson):
+  %
+  \begin{lstlisting}
+$ less Output/SM/EWSB/Vertices/VertexListFFV.m\end{lstlisting}%$
+  %
+  Beta functions (gauge couplings):
+  %
+  \begin{lstlisting}
+$ less Output/SM/RGEs/BetaGauge.m\end{lstlisting}%$
+  %
+  1-loop self-energies:
+  %
+  \begin{lstlisting}
+$ less Output/SM/EWSB/One-Loop/SelfEnergy.m\end{lstlisting}%$
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Compilers and Libraries}
-
-\begin{frame}[fragile]{\insertsection\ -- compilers and libraries}
-  \textbf{Requirements:} \CXX\ compiler, \FORTRAN\ compiler, BOOST
-  library, Eigen3 library, GNU Scientific Library
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- spectrum generator}
+  Let's create a \SPheno\ spectrum generator for the SM.
 
   \bigskip
 
-  Installation on \textbf{Ubuntu}:
-  \begin{lstlisting}[language=sh]
-sudo apt install gcc g++ gfortran libboost-dev libeigen3-dev libgsl-dev dpkg-dev\end{lstlisting}
+  Let's first look into the \SPheno\ model file for the SM:
   %
-  Installation on \textbf{MacOS}:
-  \begin{lstlisting}[language=sh]
-brew install gcc boost eigen gsl\end{lstlisting}
+  \begin{lstlisting}
+$ less Models/SM/SPheno.m\end{lstlisting}%$
+  %
+  It defines boundary conditions for input and output parameters, loop
+  corrections, observables, \ldots
+
+  \bigskip
+
+  Now we'll create the FORTRAN source code for the \SPheno\ spectrum
+  generator:
+  %
+  \begin{lstlisting}
+$ math
+In[]:= << SARAH`
+In[]:= Start["SM"]
+In[]:= MakeSPheno[]
+In[]:= Quit[]\end{lstlisting}%$
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{FlexibleSUSY}
-
-\begin{frame}[fragile]{\insertsection\ -- \FlexibleSUSY}
-  \begin{lstlisting}[language=sh]
-wget https://flexiblesusy.hepforge.org/downloads/FlexibleSUSY-2.8.0.tar.gz
-tar -xf FlexibleSUSY-2.8.0.tar.gz
-cd FlexibleSUSY-2.8.0\end{lstlisting}%$
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- spectrum generator}
+  Now we must copy the generated FORTRAN files to the \SPheno\
+  directory.
+  %
+  \begin{lstlisting}
+$ mv Output/SM/EWSB/SPheno \
+    ~/hep-software/SPheno-4.0.5/SM\end{lstlisting}%$
+  %
+  We go to the \SPheno\ directory and compile the source code:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/SPheno-4.0.5
+$ make F90=gfortran
+$ make F90=gfortran Model=SM\end{lstlisting}%$
+  %
+  Now we can run the spectrum generator and inspect the SLHA output file:
+  %
+  \begin{lstlisting}
+$ bin/SPhenoSM SM/Input_Files/LesHouches.in.SM
+$ less SPheno.spc.SM\end{lstlisting}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Standard Model}
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- spectrum generator}
+  Let's now create a \FlexibleSUSY\ spectrum generator for the SM.
 
-\begin{frame}{\insertsection\ (SM)}
-  Interaction Lagrangian in terms of Weyl 2-Spinors:
-  \begin{align*}
-    \Lagrin
-    &= \qty[-Y^d_{ij} H_a^* d_iq_{aj} - Y^e_{ij} H_a^* e_i\ell_{aj} - Y^u_{ij} u_iq_{aj}H_a + \hc] \\
-    &\phantom{=}{} -\mu^2 H_a^* H_a - \frac{1}{2} (H_a^* H_a)^2
-  \end{align*}
+  \bigskip
+
+  Move into the FlexibleSUSY-2.8.0 directory:
+  \begin{lstlisting}
+$ cd ~/hep-software/FlexibleSUSY-2.8.0\end{lstlisting}%$
+  %
+  Let's first look into the \FlexibleSUSY\ model file for the SM:
+  %
+  \begin{lstlisting}
+$ less model_files/SM/FlexibleSUSY.m.in\end{lstlisting}%$
+  %
+  It defines boundary conditions for input and output parameters, loop
+  corrections, observables, \ldots
+
+  \bigskip
+
+  References:\\
+  \url{https://arxiv.org/abs/1406.2319}\\
+  \url{https://arxiv.org/abs/1710.03760}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection}
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- spectrum generator}
+  Now we'll build the \FlexibleSUSY\ spectrum generator for the SM.
+
+  \bigskip
+
+  Define variable for the \LoopTools\ directory
+  \begin{lstlisting}
+$ LT=$HOME/hep-software/LoopTools/build\end{lstlisting}%$
   Create and build the SM spectrum generator:
   \begin{lstlisting}
-./createmodel -f --name=SM
-./configure --with-models=SM
-make -j4\end{lstlisting}
-  Run it:
+$ ./createmodel --name=SM
+$ ./configure --with-models=SESM \
+     --with-loop-libraries=looptools \
+     --with-looptools-incdir=$LT
+     --with-looptools-libdir=$LT
+$ make -j4\end{lstlisting}%$
+  %
+  Run the spectrum genrator:
+  %
   \begin{lstlisting}
-./models/SM/run_SM.x --slha-input-file=models/SM/LesHouches.in.SM\end{lstlisting}
-
-%   \begin{lstlisting}
-% wget https://github.com/FlexibleSUSY/FlexibleSUSY/releases/download/v2.8.0/SM.tar.gz
-% tar xf SM.tar.gz
-% ./configure --with-models=SM --disable-meta
-% make -j4\end{lstlisting}
+$ models/SM/run_SM.x \
+    --slha-input-file=models/SM/LesHouches.in.SM\end{lstlisting}%$
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
