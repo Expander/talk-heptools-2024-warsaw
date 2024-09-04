@@ -110,6 +110,8 @@
 \newcommand{\Mathematica}{\texttt{Mathematica}}
 \newcommand{\micrOMEGAs}{\texttt{micrOMEGAs}}
 \newcommand{\SARAH}{\texttt{SARAH}}
+\newcommand{\SESM}{\text{SESM}}
+\newcommand{\SM}{\text{SM}}
 \newcommand{\SPheno}{\texttt{SPheno}}
 
 \newcommand{\SMtable}{%
@@ -156,9 +158,6 @@
 \tikzstyle{phantom}   = [rectangle, black, minimum width=2em, text centered, minimum height=2em]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newcommand{\Exp}{\text{Exp}}
-\newcommand{\SM}{\text{SM}}
 
 \definecolor{red}{rgb}{1.0,0.2,0.2}
 \definecolor{blue}{rgb}{0,0.7,1.0}
@@ -549,12 +548,120 @@ $ models/SM/run_SM.x \
 \section{Standard Model + S}
 
 \begin{frame}{\insertsection}
+  As a second example, let us consider an extension of the SM by an
+  extra real scalar gauge singlet. The model should be called Singlet
+  Extension of the Standard Model (\SESM).  The Lagrangian should read
+  %
+  \begin{equation*}
+    \Lagr_{\SESM} = \Lagr_{\SM} - \left[K_1 H^\dagger H s + \frac{K_2}{2} H^\dagger H s^2 + \frac{M_s}{2} s^2 + \frac{\kappa}{3} s^3 + \frac{\lambda_s}{2} s^4\right]
+  \end{equation*}
+  %
+  We will proceed as follows:
+  %
+  \begin{enumerate}
+  \item Create a \SARAH\ model file for the SESM
+  \item Create a \FlexibleSUSY\ model file for the SESM
+  \item Create a \micrOMEGAs\ model file for the SESM
+  \item Run \FlexibleSUSY\ and pass the output to \micrOMEGAs\ to
+    calculate the dark matter relic abundance $\Omega h^2$.
+  \end{enumerate}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[allowframebreaks]{References}
-  \printbibliography
+\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+  We start from \SARAH's \SM\ model files:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/SARAH
+$ mkdir -p Models/SESM
+$ cp Models/SM/parameters.m Models/SESM/
+$ cp Models/SM/particles.m Models/SESM/
+$ cp Models/SM/SM.m Models/SESM/SESM.m\end{lstlisting}%$
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+  First, we modify \texttt{Models/SESM/SESM.m}:
+
+  \medskip
+
+  1. Add the new scalar field:
+  %
+  \begin{lstlisting}
+ScalarFields[[2]] = {s, 1, Sing, 0, 1, 1};
+RealScalars = {s};\end{lstlisting}
+  %
+  2. Extend the Lagrangian:
+  %
+  \begin{lstlisting}
+LagNoHC = -(
+  + mu2 conj[H].H                    (* SM *)
+  + \[Lambda]/2 conj[H].H.conj[H].H  (* SM *)
+  + K1 conj[H].H.s
+  + K2/2 conj[H].H.s.s
+  + MS/2 s.s
+  + \[Kappa]/3 s.s.s
+  + LambdaS/2 s.s.s.s
+);\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+  3. Give a VEV to the new (real) singlet:
+  %
+  \begin{equation*}
+    s = v_S + \phi_S
+  \end{equation*}
+  %
+  \begin{lstlisting}
+DEFINITION[EWSB][VEVs] = {
+  {H0, {v, 1/Sqrt[2]},
+       {Ah, \[ImaginaryI]/Sqrt[2]},
+       {phiH, 1/Sqrt[2]} },
+  {Sing, {vS, 1},
+         {0, 0},
+         {phiS, 1}
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+  4. Mix $\phi_S$ with $\phi_H$:
+  %
+  \begin{equation*}
+    \begin{pmatrix}
+      h_1 \\ h_2
+    \end{pmatrix}
+    =
+    Z_H
+    % \begin{pmatrix}
+    %   (Z_H)_{11} & (Z_H)_{12} \\
+    %   (Z_H)_{21} & (Z_H)_{22}
+    % \end{pmatrix}
+    \begin{pmatrix}
+      \phi_H \\ \phi_S
+    \end{pmatrix},
+    \qquad
+    Z_H^T = Z_H
+  \end{equation*}
+  %
+  \begin{lstlisting}
+DEFINITION[EWSB][MatterSector] = {
+  {{phiH, phiS}, {hh, ZH}},
+  {{{dL}, {conj[dR]}}, {{DL,Vd}, {DR,Ud}}},
+  {{{uL}, {conj[uR]}}, {{UL,Vu}, {UR,Uu}}},
+  {{{eL}, {conj[eR]}}, {{EL,Ve}, {ER,Ue}}}
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}[allowframebreaks]{References}
+%   \printbibliography
+% \end{frame}
 
 \end{document}
