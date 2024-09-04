@@ -550,10 +550,11 @@ $ models/SM/run_SM.x \
 \begin{frame}{\insertsection}
   As a second example, let us consider an extension of the SM by an
   extra real scalar gauge singlet. The model should be called Singlet
-  Extension of the Standard Model (\SESM).  The Lagrangian should read
+  Extension of the Standard Model (\SESM).  The Lagrangian should have
+  a global $Z_2$ symmetry and should read
   %
   \begin{equation*}
-    \Lagr_{\SESM} = \Lagr_{\SM} - \left[K_1 H^\dagger H s + \frac{K_2}{2} H^\dagger H s^2 + \frac{M_s}{2} s^2 + \frac{\kappa}{3} s^3 + \frac{\lambda_s}{2} s^4\right]
+    \Lagr_{\SESM} = \Lagr_{\SM} - \left[\frac{\lambda_{SH}}{2} H^\dagger H s^2 + \frac{M_s^2}{2} s^2 + \frac{\lambda_s}{2} s^4\right]
   \end{equation*}
   %
   We will proceed as follows:
@@ -587,30 +588,51 @@ $ cp Models/SM/SM.m Models/SESM/SESM.m\end{lstlisting}%$
 
   \medskip
 
-  1. Add the new scalar field:
+  1. Add a global $Z_2$ symmetry and assign the charge $+1$ to each SM
+  field:
   %
   \begin{lstlisting}
-ScalarFields[[2]] = {s, 1, Sing, 0, 1, 1};
+Global[[1]] = {Z[2], Z2};
+
+Gauge[[1]]={..., 1};
+Gauge[[2]]={..., 1};
+Gauge[[3]]={..., 1};
+
+FermionFields[[1]] = {..., 1};  
+FermionFields[[2]] = {..., 1};
+FermionFields[[3]] = {..., 1};
+FermionFields[[4]] = {..., 1};
+FermionFields[[5]] = {..., 1};
+
+ScalarFields[[1]] =  {..., 1};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+  %
+  2. Add the new scalar field with $Z_2$ charge $-1$:
+  %
+  \begin{lstlisting}
+ScalarFields[[2]] = {s, 1, Sing, 0, 1, 1, -1};
 RealScalars = {s};\end{lstlisting}
   %
-  2. Extend the Lagrangian:
+  3. Extend the Lagrangian:
   %
   \begin{lstlisting}
 LagNoHC = -(
-  + mu2 conj[H].H                    (* SM *)
-  + \[Lambda]/2 conj[H].H.conj[H].H  (* SM *)
-  + K1 conj[H].H.s
-  + K2/2 conj[H].H.s.s
-  + MS/2 s.s
-  + \[Kappa]/3 s.s.s
-  + LambdaS/2 s.s.s.s
+    + mu2 conj[H].H
+    + \[Lambda]/2 conj[H].H.conj[H].H
+    + LambdaSH/2 conj[H].H.s.s
+    + MS2/2 s.s
+    + LambdaS/2 s.s.s.s
 );\end{lstlisting}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]{\insertsection -- SARAH -- model file}
-  3. Give a VEV to the new (real) singlet:
+  4. Give a VEV to the new (real) singlet:
   %
   \begin{equation*}
     s = v_S + \phi_S
