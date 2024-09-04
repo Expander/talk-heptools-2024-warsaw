@@ -346,7 +346,6 @@
   \item Create a \SPheno\ spectrum generator 
   \item Create a \FlexibleSUSY-2\ spectrum generator 
   \end{enumerate}
-  Reference: \url{https://sarah.hepforge.org/}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -367,6 +366,7 @@
     Definitions of information about the model parameters (Output
     name, \LaTeX\ name, SLHA output block, \ldots)
   \end{itemize}
+
   \bigskip
 
   References: \url{https://sarah.hepforge.org/}
@@ -432,6 +432,10 @@ $ less Output/SM/EWSB/One-Loop/SelfEnergy.m\end{lstlisting}%$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{SPheno}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}[fragile]{\insertsection\ -- SPheno -- spectrum generator}
   Let's create a \SPheno\ spectrum generator for the SM.
 
@@ -485,6 +489,10 @@ $ less SPheno.spc.SM\end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{FlexibleSUSY}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- spectrum generator}
   Let's now create a \FlexibleSUSY\ spectrum generator for the SM.
 
@@ -517,7 +525,7 @@ $ less model_files/SM/FlexibleSUSY.m.in\end{lstlisting}%$
 
   \bigskip
 
-  Define variable for the \LoopTools\ directory
+  Define a variable to contain the \LoopTools\ directory
   \begin{lstlisting}
 $ LT=$HOME/hep-software/LoopTools/build\end{lstlisting}%$
   Create and build the SM spectrum generator:
