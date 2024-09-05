@@ -113,6 +113,7 @@
 \newcommand{\SESM}{\text{SESM}}
 \newcommand{\SM}{\text{SM}}
 \newcommand{\SPheno}{\texttt{SPheno}}
+\newcommand{\TSESM}{\text{TSESM}}
 
 \newcommand{\SMtable}{%
     \begin{tikzpicture}[node distance = 2.5em, auto]
@@ -1022,13 +1023,14 @@ $ less SPheno.spc.SESM\end{lstlisting}%$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{\insertsection}
-  As a second example, let us consider an extension of the SM by an
-  extra real scalar gauge singlet. The model should be called Singlet
-  Extension of the Standard Model (\SESM).  The Lagrangian should have
-  a global $Z_2$ symmetry and should read
+  As a second example, let us consider an extension of the SESM by
+  another real scalar gauge singlet. The model should be called Two
+  Singlet Extension of the Standard Model (\TSESM). The Lagrangian
+  should have a global $Z_2$ symmetry with all non-SM fields having
+  $Z_2$ charge $-1$:
   %
   \begin{equation*}
-    \Lagr_{\SESM} = \Lagr_{\SM} - \left[\frac{\lambda_{SH}}{2} H^\dagger H s^2 + \frac{M_S^2}{2} s^2 + \frac{\lambda_S}{2} s^4\right]
+    \Lagr_{\TSESM} = \Lagr_{\SESM} - \left[\frac{\tilde\lambda_{SH}}{2} H^\dagger H \tilde{s}^2 + \frac{\tilde{M}_S^2}{2} \tilde{s}^2 + \frac{\tilde{\lambda}_S}{2} \tilde{s}^4\right]
   \end{equation*}
   %
   We will proceed as follows:
