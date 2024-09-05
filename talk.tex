@@ -73,7 +73,7 @@
         ({min(\x2 + \x3 - \x1,\x0)},\y0) rectangle ({max(\x3 + \x2 - \x0,\x1)},\y1);
 }}}
 
-\lstset{ 
+\lstset{
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
   basicstyle=\footnotesize\ttfamily,        % the size of the fonts that are used for the code
   breaklines=true,                 % sets automatic line breaking
@@ -342,8 +342,8 @@
   \begin{enumerate}
   \item Inspect the \SARAH\ model files and generate some analytic
     expressions
-  \item Create a \SPheno\ spectrum generator 
-  \item Create a \FlexibleSUSY-2\ spectrum generator 
+  \item Create a \SPheno\ spectrum generator
+  \item Create a \FlexibleSUSY\ spectrum generator
   \end{enumerate}
 \end{frame}
 
@@ -354,14 +354,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]{\insertsection\ -- SARAH -- inspect model files}
+
+  Go to the \SARAH\ directory:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/SARAH\end{lstlisting}%$
+  %
   Let's inspect the following \SARAH\ files:
   \begin{itemize}
-  \item \texttt{SARAH/Models/SM/SM.m}\\ Definitions of the gauge
+  \item \texttt{Models/SM/SM.m}\\ Definitions of the gauge
     group, fields, Lagrangian, VEVs, field mixings, \ldots
-  \item \texttt{SARAH/Models/SM/particles.m}\\
+  \item \texttt{Models/SM/particles.m}\\
     Definitions of properties of the fields (output name, \LaTeX\
     name, PDG number, FeynArts number, \ldots)
-  \item \texttt{SARAH/Models/SM/parameters.m}\\
+  \item \texttt{Models/SM/parameters.m}\\
     Definitions of information about the model parameters (Output
     name, \LaTeX\ name, SLHA output block, \ldots)
   \end{itemize}
@@ -375,10 +381,12 @@
 
 \begin{frame}[fragile]{\insertsection\ -- SARAH -- inspect model properties}
   Let's start \SARAH\ and inspect some model properties.
-  
-  Go to \texttt{$\sim$/hep-software/SARAH}:
-  \begin{lstlisting}
-$ cd ~/hep-software/SARAH\end{lstlisting}%$
+
+  \medskip
+
+%   Go to \texttt{$\sim$/hep-software/SARAH}:
+%   \begin{lstlisting}
+% $ cd ~/hep-software/SARAH\end{lstlisting}%$
   %
   Start \Mathematica:
   \begin{lstlisting}
@@ -389,7 +397,7 @@ $ math\end{lstlisting}%$
   \begin{lstlisting}
 In[]:= << SARAH`
 In[]:= << Start["SM"]
-In[]:= SARAH`Commands (* show some available commands *)\end{lstlisting}
+In[]:= SARAH`Commands (* shows available commands *)\end{lstlisting}
   %
   Let's inspect some model properties:
   %
@@ -465,17 +473,16 @@ In[]:= Quit[]\end{lstlisting}%$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]{\insertsection\ -- SPheno -- spectrum generator}
-  Now we must copy the generated FORTRAN files to the \SPheno\
-  directory.
-  %
-  \begin{lstlisting}
-$ mv Output/SM/EWSB/SPheno \
-    ~/hep-software/SPheno-4.0.5/SM\end{lstlisting}%$
-  %
-  We go to the \SPheno\ directory and compile the source code:
+  Now go to the \SPheno\ directory and copy the generated FORTRAN
+  files to the \SM\ sub-directory.
   %
   \begin{lstlisting}
 $ cd ~/hep-software/SPheno-4.0.5
+$ mv ~/hep-software/SARAH/Output/SM/EWSB/SPheno SM\end{lstlisting}%$
+  %
+  Then we compile the source code:
+  %
+  \begin{lstlisting}
 $ make F90=gfortran
 $ make F90=gfortran Model=SM\end{lstlisting}%$
   %
@@ -497,7 +504,7 @@ $ less SPheno.spc.SM\end{lstlisting}
 
   \bigskip
 
-  Move into the FlexibleSUSY-2.8.0 directory:
+  Go into the FlexibleSUSY-2.8.0 directory:
   \begin{lstlisting}
 $ cd ~/hep-software/FlexibleSUSY-2.8.0\end{lstlisting}%$
   %
@@ -547,6 +554,519 @@ $ models/SM/run_SM.x \
 
 \section{Standard Model + S}
 
+\subsection{SARAH}
+
+\begin{frame}{\insertsection}
+  As a second example, let's consider an extension of the SM by an
+  extra real scalar gauge singlet. The model should be called Singlet
+  Extension of the Standard Model (\SESM).  The Lagrangian should read
+  %
+  \begin{equation*}
+    \Lagr_{\SESM} = \Lagr_{\SM} - \left[\kappa_{SH} H^\dagger H s + \frac{\lambda_{SH}}{2} H^\dagger H s^2 + \frac{M_S^2}{2} s^2 + \frac{\kappa_S}{3} s^3 + \frac{\lambda_S}{2} s^4\right]
+  \end{equation*}
+  %
+  We will proceed as follows:
+  %
+  \begin{enumerate}
+  \item Create a \SARAH\ model file for the SESM
+  \item Create a \FlexibleSUSY\ model file for the SESM and run it
+  \item Create a \SPheno\ model file for the SESM and run it
+  \end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  First, we will create a \SARAH\ model file for our new SESM model.
+
+  \bigskip
+
+  Go into the \SARAH\ directory:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/SARAH\end{lstlisting}%$
+  %
+  We start by copying \SARAH's \SM\ model files to a new directory named
+  \texttt{SESM}:
+  %
+  \begin{lstlisting}
+$ mkdir -p Models/SESM
+$ cp Models/SM/parameters.m Models/SESM/
+$ cp Models/SM/particles.m Models/SESM/
+$ cp Models/SM/SM.m Models/SESM/SESM.m\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  First, we modify \texttt{Models/SESM/SESM.m}:
+
+  \medskip
+
+  1. Add the new scalar field:
+  %
+  \begin{lstlisting}
+ScalarFields[[2]] = {s, 1, Sing, 0, 1, 1};
+RealScalars = {s};\end{lstlisting}
+  %
+  3. Extend the Lagrangian:
+  %
+  \begin{lstlisting}
+LagNoHC = -(
+    + mu2 conj[H].H
+    + \[Lambda]/2 conj[H].H.conj[H].H
+    + KapSH conj[H].H.s
+    + LamSH/2 conj[H].H.s.s
+    + MS2/2 s.s
+    + KapS/3 s.s.s
+    + LamS/2 s.s.s.s
+);\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  4. Give a VEV to the new (real) singlet:
+  %
+  \begin{equation*}
+    s = v_S + \phi_S
+  \end{equation*}
+  %
+  \begin{lstlisting}
+DEFINITION[EWSB][VEVs] = {
+  {H0, {v, 1/Sqrt[2]},
+       {Ah, \[ImaginaryI]/Sqrt[2]},
+       {phiH, 1/Sqrt[2]} },
+  {Sing, {vS, 1},
+         {0, 0},
+         {phiS, 1}
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  5. Mix $\phi_S$ with $\phi_H$:
+  %
+  \begin{equation*}
+    \begin{pmatrix}
+      h_1 \\ h_2
+    \end{pmatrix}
+    =
+    Z_H
+    % \begin{pmatrix}
+    %   (Z_H)_{11} & (Z_H)_{12} \\
+    %   (Z_H)_{21} & (Z_H)_{22}
+    % \end{pmatrix}
+    \begin{pmatrix}
+      \phi_H \\ \phi_S
+    \end{pmatrix},
+    \qquad
+    Z_H^T = Z_H
+  \end{equation*}
+  %
+  \begin{lstlisting}
+DEFINITION[EWSB][MatterSector] = {
+  {{phiH, phiS}, {hh, ZH}},
+  {{{dL}, {conj[dR]}}, {{DL,Vd}, {DR,Ud}}},
+  {{{uL}, {conj[uR]}}, {{UL,Vu}, {UR,Uu}}},
+  {{{eL}, {conj[eR]}}, {{EL,Ve}, {ER,Ue}}}
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  6. Modify the particle information in
+  \texttt{Models/SESM/particles.m}.
+
+  \bigskip
+
+  First, define the new \texttt{Sing} gauge eigenstate
+  %
+  \begin{lstlisting}
+ParticleDefinitions[GaugeES] = {
+  {Sing, { Description -> "Singlet",
+           PDG -> {0},
+           Width -> 0,
+           Mass -> Automatic,
+           ElectricCharge -> 0,
+           FeynArtsNr -> 3,
+           LaTeX -> "s",
+           OutputName -> "s" }},
+  ...
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  6. \ldots\ continuing \ldots
+
+  \bigskip
+
+  Extend Higgs to be a doublet in mass eigenstates
+  %
+  \begin{lstlisting}
+ParticleDefinitions[EWSB] = {
+  {hh, { Description -> "Higgs",
+         PDG -> {25,35}, (* <-- two PDG numbers *)
+         PDG.IX -> {101000001,101000002} (* <-- *)
+       }
+  },
+  ...
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  6. \ldots\ continuing \ldots
+
+  \bigskip
+
+  Change the name of the intermediate neutral component of the SM
+  Higgs doublet to \texttt{phiH}:
+  %
+  \begin{lstlisting}
+WeylFermionAndIndermediate = {
+  {phiH, { PDG -> {0}, (* <-- name changed to phiH *)
+           Width -> 0,
+           Mass -> Automatic,
+           LaTeX -> "H",
+           OutputName -> "" }},
+  ...
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  7. Modify the parameter information in
+  \texttt{Models/SESM/parameters.m}.
+
+  \bigskip
+
+  Add the new model parameters and their properties
+  %
+  \begin{lstlisting}
+ParameterDefinitions = {
+  {ZH, { Description -> "Scalar-Mixing-Matrix" }},
+  {\[Alpha],
+       { Description -> "Scalar mixing angle" }},
+  {vS, { Dependence -> None,
+         DependenceNum -> None,
+         DependenceOptional -> None,
+         DependenceSPheno -> None,
+         Real -> True,
+         LesHouches -> {HMIX, 51},
+         LaTeX -> "vS",
+         OutputName -> vS }},
+  ...
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  7. \ldots\ continuing \ldots
+  %
+  \begin{lstlisting}
+ParameterDefinitions = {
+  ...
+  {MS2, { LaTeX -> "M_S^2",
+          Real -> True,
+          OutputName -> MS2,
+          LesHouches -> {HMIX,30} }},
+  {LamS, { LaTeX -> "\\lambda_S",
+           Real -> True,
+           OutputName -> LamS,
+           LesHouches -> {HMIX,31} }},
+  {LamSH, { LaTeX -> "\\lambda_{SH}",
+            Real -> True,
+            OutputName -> LamSH,
+            LesHouches -> {HMIX,32} }},
+  ...
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  7. \ldots\ continuing \ldots
+  %
+  \begin{lstlisting}
+ParameterDefinitions = {
+  ...
+  {KapS, { LaTeX -> "\\kappa_S",
+           Real -> True,
+           OutputName -> KapS,
+           LesHouches -> {HMIX,33} }},
+  {KapSH, { LaTeX -> "\\kappa_{SH}",
+            Real -> True,
+            OutputName -> KapSH,
+            LesHouches -> {HMIX,34} }}
+};\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- check model}
+  8. Check the \SARAH\ model
+  %
+  \begin{lstlisting}
+$ math
+In[]:= << SARAH`
+In[]:= Start["SESM"]
+In[]:= CheckModel[]
+In[]:= Quit[]'\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{FlexibleSUSY}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- model file}
+  Now we turn to create a \FlexibleSUSY\ model file.
+
+  \bigskip
+
+  1. Go to the \FlexibleSUSY\ directory:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/FlexibleSUSY-2.8.0\end{lstlisting}%$
+  %
+  Copy the SM model to a new model directory named \texttt{model\_files/SESM}
+  %
+  \begin{lstlisting}
+$ mkdir -p model_files/SESM
+$ cp model_files/SM/FlexibleSUSY.m.in \
+    model_files/SESM/
+$ cp model_files/SM/LesHouches.in.SM \
+     model_files/SESM/LesHouches.in.SESM\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- model file}
+  2. Edit the \FlexibleSUSY\ model file
+  \texttt{model\_files/SESM/FlexibleSUSY.m.in}
+
+  \bigskip
+
+  Define new input parameters and the SLHA blocks they are read from:
+  %
+  \begin{lstlisting}
+FSDefaultSARAHModel = SESM; (* SARAH model *)
+
+MINPAR = {};
+
+EXTPAR = {
+    {0, Qin},
+    {1, QEWSB},
+    {2, LambdaIN},
+    {3, LamSIN},
+    {4, LamSHIN},
+    {5, KapSIN},
+    {6, KapSHIN},
+    {7, vSIN}
+};\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- model file}
+  2. \ldots\ continuing \ldots
+
+  \bigskip
+
+  Fix the new parameters at appropriate scales by EWSB and by the
+  input values:
+  %
+  \begin{lstlisting}
+EWSBOutputParameters = { mu2, MS2 };
+
+HighScaleInput = {
+    {\[Lambda], LambdaIN},
+    {LamS, LamSIN},
+    {LamSH, LamSHIN},
+    {KapS, KapSIN},
+    {KapSH, KapSHIN}
+};
+
+SUSYScaleInput = {
+    {vS, vSIN}
+};\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- build}
+  3. Create, configure and compile the FlexibleSUSY spectrum
+  generator:
+  %
+  \begin{lstlisting}
+$ LT=$HOME/hep-software/LoopTools/build
+
+$ ./createmodel -f --name=SESM
+
+$ ./configure --with-models=SESM \
+     --with-loop-libraries=looptools \
+     --with-looptools-incdir=$LT \
+     --with-looptools-libdir=$LT
+
+$ make -j4\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- SLHA input}
+  4. Set reasonable values for the input parameters in the SLHA input
+  file \texttt{model\_files/SESM/LesHouches.in.SESM}
+  %
+  \begin{lstlisting}
+Block EXTPAR      # Input parameters
+    0   1000      # input scale Qin
+    1   173.34    # scale QEWSB
+    2   0.21      # LambdaIN
+    3   0.1       # LamSIN
+    4   0.1       # LamSHIN
+    5   100       # KapSIN
+    6  -100       # KapSHIN
+    7   3         # vSIN\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- run}
+  5. Run FlexibleSUSY:
+  %
+  \begin{lstlisting}
+$ models/SESM/run_SESM.x \
+    --slha-input-file=model_files/SESM/LesHouches.in.SESM\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{SPheno}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
+  Finally, let's create a \SPheno\ spectrum generator.
+
+  \bigskip
+
+  1. Go to the \SARAH\ directory and copy the model file
+  \texttt{SPheno.m} from the SM to the SESM model directory:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/SARAH
+$ cp Models/SM/SPheno.m Models/SESM/\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
+  2. Modify the \texttt{SPheno.m} model file to define new input
+  parameters:
+  %
+  \begin{lstlisting}
+MINPAR = {
+    {2, LambdaIN},
+    {3, LambdaSIN},
+    {4, LambdaSHIN},
+    {5, KappaSIN},
+    {6, KappaSHIN},
+    {7, vevSIN}
+};\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
+  2. \ldots\ continuing \ldots
+
+  \bigskip
+
+  Fix the new parameters by EWSB and the input values :
+  %
+  \begin{lstlisting}
+ParametersToSolveTadpoles = {mu2, MS2};
+
+BoundaryLowScaleInput = {
+    {\[Lambda], LambdaIN},
+    {LambdaS, LambdaSIN},
+    {LambdaSH, LambdaSHIN},
+    {KapS, KappaSIN},
+    {KapSH, KappaSHIN},
+    {vS, vevSIN}
+};\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
+  3. Create the FORTRAN files for the \SPheno\ spectrum generator:
+  %
+  \begin{lstlisting}
+$ math
+In[]:= << SARAH`
+In[]:= Start["SESM"]
+In[]:= MakeSPheno[]
+In[]:= Quit[]'\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
+  4. Go to the \SPheno\ directory:
+  %
+  \begin{lstlisting}
+$ cd ~/hep-software/SPheno-4.0.5\end{lstlisting}%$
+  %
+  Copy the generated FORTRAN files from the \SARAH\ directory to the
+  \SPheno\ directory and compile the spectrum generator:
+  %
+  \begin{lstlisting}
+$ mv ~/hep-software/SARAH/Output/SESM/EWSB/SPheno SESM
+$ make F90=gfortran
+$ make F90=gfortran Model=SESM\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
+  5. Set the input parameters to reasonable values in the SLHA input
+  file \texttt{SESM/Input\_Files/LesHouches.in.SESM}:
+  %
+  \begin{lstlisting}
+Block MINPAR   # Input parameters 
+ 2   0.21      # LambdaIN
+ 3   0.1       # LamSIN
+ 4   0.1       # LamSHIN
+ 5   100       # KapSIN
+ 6  -100       # KapSHIN
+ 7   3         # vSIN\end{lstlisting}%$
+  %
+  6. Run the \SPheno\ spectrum generator:
+  \begin{lstlisting}
+$ ./bin/SPhenoSSM \
+     SESM/Input_Files/LesHouches.in.SESM\end{lstlisting}%$
+  and inspect the output:
+  \begin{lstlisting}
+$ less SPheno.spc.SESM\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Standard Model + S + S}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}{\insertsection}
   As a second example, let us consider an extension of the SM by an
   extra real scalar gauge singlet. The model should be called Singlet
@@ -554,7 +1074,7 @@ $ models/SM/run_SM.x \
   a global $Z_2$ symmetry and should read
   %
   \begin{equation*}
-    \Lagr_{\SESM} = \Lagr_{\SM} - \left[\frac{\lambda_{SH}}{2} H^\dagger H s^2 + \frac{M_s^2}{2} s^2 + \frac{\lambda_s}{2} s^4\right]
+    \Lagr_{\SESM} = \Lagr_{\SM} - \left[\frac{\lambda_{SH}}{2} H^\dagger H s^2 + \frac{M_S^2}{2} s^2 + \frac{\lambda_S}{2} s^4\right]
   \end{equation*}
   %
   We will proceed as follows:
@@ -570,21 +1090,8 @@ $ models/SM/run_SM.x \
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
-  We start from \SARAH's \SM\ model files:
-  %
-  \begin{lstlisting}
-$ cd ~/hep-software/SARAH
-$ mkdir -p Models/SESM
-$ cp Models/SM/parameters.m Models/SESM/
-$ cp Models/SM/particles.m Models/SESM/
-$ cp Models/SM/SM.m Models/SESM/SESM.m\end{lstlisting}%$
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
-  First, we modify \texttt{Models/SESM/SESM.m}:
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
+  First, we modify \texttt{Models/TSESM/TSESM.m}:
 
   \medskip
 
@@ -598,7 +1105,7 @@ Gauge[[1]]={..., 1};
 Gauge[[2]]={..., 1};
 Gauge[[3]]={..., 1};
 
-FermionFields[[1]] = {..., 1};  
+FermionFields[[1]] = {..., 1};
 FermionFields[[2]] = {..., 1};
 FermionFields[[3]] = {..., 1};
 FermionFields[[4]] = {..., 1};
@@ -609,7 +1116,7 @@ ScalarFields[[1]] =  {..., 1};\end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
   %
   2. Add the new scalar field with $Z_2$ charge $-1$:
   %
@@ -631,7 +1138,7 @@ LagNoHC = -(
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
   4. Give a VEV to the new (real) singlet:
   %
   \begin{equation*}
@@ -651,7 +1158,7 @@ DEFINITION[EWSB][VEVs] = {
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection -- SARAH -- model file}
+\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
   5. Mix $\phi_S$ with $\phi_H$:
   %
   \begin{equation*}
