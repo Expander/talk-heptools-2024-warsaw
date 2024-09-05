@@ -231,110 +231,13 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \section{Setup}
-% \subsection{Mathematica}
-
-% \begin{frame}[fragile]{\insertsection\ -- Mathematica}
-%   \begin{enumerate}
-%   \item Get a free licence for WolframEngine:
-%     \begin{center}
-%       \url{https://www.wolfram.com/engine/free-license/}
-%     \end{center}
-%   \item Download an install WolframEngine 14.1 from:
-%     \begin{center}
-%       \url{https://www.wolfram.com/engine/}
-%     \end{center}
-%   \item Ensure the Wolfram Language Kernel can be called from the
-%     command line by running \texttt{math}:
-%     \begin{lstlisting}[language=sh]
-% $PATH=$PATH:/usr/local/Wolfram/WolframEngine/14.1/Executables/\end{lstlisting}
-%   \item Test it:
-%     \begin{lstlisting}
-% math -run "Print[Hello World]; Quit[]"\end{lstlisting}
-%   \end{enumerate}
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \subsection{SARAH}
-
-% \begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
-%   \textbf{Goal:} The following command should work:
-%   \begin{lstlisting}
-% math -run "<< SARAH\`"\end{lstlisting}
-%   It should print (or similar):
-%   \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
-% Wolfram Language 14.1.0 Engine for Linux x86 (64-bit)
-% Copyright 1988-2023 Wolfram Research, Inc.
-
-% SARAH 4.15.2
-% by Florian Staub, Mark Goodsell and Werner Porod, 2020
-% contributions by M. Gabelmann, K. Nickel\end{lstlisting}
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \begin{frame}[fragile]{\insertsection\ -- \SARAH\ 4.15.2}
-%   \textbf{Method 1:} automatic download and installation:
-%   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
-% wget https://raw.githubusercontent.com/FlexibleSUSY/FlexibleSUSY/development/install-sarah
-% chmod +x install-sarah
-% ./install-sarah --flavour=WolframEngine\end{lstlisting}
-%   \textbf{Method 2:} manual download:
-%   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
-% cd ~/.WolframEngine/Applications
-% wget https://sarah.hepforge.org/downloads/SARAH-4.15.2.tar.gz
-% tar -xf SARAH-4.15.2.tar.gz
-% ln -s SARAH-4.15.2 SARAH\end{lstlisting}
-%   and installation:
-%   \begin{lstlisting}[language=sh,basicstyle=\scriptsize\ttfamily]
-% cd ~/.WolframEngine/Kernel
-% echo 'AppendTo[$Path, FileNameJoin[{$HomeDirectory, ".WolframEngine", "Applications", "SARAH"}]];' >> init.m
-% \end{lstlisting}%$
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \subsection{Compilers and Libraries}
-
-% \begin{frame}[fragile]{\insertsection\ -- compilers and libraries}
-%   \textbf{Requirements:} \CXX\ compiler, \FORTRAN\ compiler, BOOST
-%   library, Eigen3 library, GNU Scientific Library
-
-%   \bigskip
-
-%   Installation on \textbf{Ubuntu}:
-%   \begin{lstlisting}[language=sh]
-% sudo apt install gcc g++ gfortran libboost-dev libeigen3-dev libgsl-dev dpkg-dev\end{lstlisting}
-%   %
-%   Installation on \textbf{MacOS}:
-%   \begin{lstlisting}[language=sh]
-% brew install gcc boost eigen gsl\end{lstlisting}
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \subsection{FlexibleSUSY}
-
-% \begin{frame}[fragile]{\insertsection\ -- \FlexibleSUSY}
-%   \begin{lstlisting}[language=sh]
-% wget https://flexiblesusy.hepforge.org/downloads/FlexibleSUSY-2.8.0.tar.gz
-% tar -xf FlexibleSUSY-2.8.0.tar.gz
-% cd FlexibleSUSY-2.8.0\end{lstlisting}%$
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Standard Model}
 
-% \begin{frame}{\insertsection\ (SM)}
-%   Interaction Lagrangian in terms of Weyl 2-Spinors:
-%   \begin{align*}
-%     \Lagrin
-%     &= \qty[-Y^d_{ij} H_a^* d_iq_{aj} - Y^e_{ij} H_a^* e_i\ell_{aj} - Y^u_{ij} u_iq_{aj}H_a + \hc] \\
-%     &\phantom{=}{} -\mu^2 H_a^* H_a - \frac{1}{2} (H_a^* H_a)^2
-%   \end{align*}
-% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection]
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -350,6 +253,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{SARAH}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -443,6 +352,12 @@ $ less Output/SM/EWSB/One-Loop/SelfEnergy.m\end{lstlisting}%$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}[fragile]{\insertsection\ -- SPheno -- spectrum generator}
   Let's create a \SPheno\ spectrum generator for the SM.
 
@@ -496,6 +411,12 @@ $ less SPheno.spc.SM\end{lstlisting}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{FlexibleSUSY}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -554,7 +475,13 @@ $ models/SM/run_SM.x \
 
 \section{Standard Model + S}
 
-\subsection{SARAH}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{\insertsection}
   As a second example, let's consider an extension of the SM by an
@@ -572,6 +499,16 @@ $ models/SM/run_SM.x \
   \item Create a \FlexibleSUSY\ model file for the SESM and run it
   \item Create a \SPheno\ model file for the SESM and run it
   \end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{SARAH}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -828,6 +765,12 @@ In[]:= Quit[]'\end{lstlisting}%$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- model file}
   Now we turn to create a \FlexibleSUSY\ model file.
 
@@ -954,6 +897,12 @@ $ models/SESM/run_SESM.x \
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}[fragile]{\insertsection\ -- SPheno -- model file}
   Finally, let's create a \SPheno\ spectrum generator.
 
@@ -1061,9 +1010,14 @@ $ less SPheno.spc.SESM\end{lstlisting}%$
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Standard Model + S + S}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection]
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
