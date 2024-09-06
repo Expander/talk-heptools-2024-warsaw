@@ -38,30 +38,10 @@
       markings,mark=at position #1 with {\arrowreversed{>}}%
     }%
   },%
-    -<-/.default=.5,
-  % use option [visible on=<+->] to uncover parts of a tikzpicture
-  invisible/.style={opacity=0},
-  visible on/.style={alt=#1{}{invisible}},
-  alt/.code args={<#1>#2#3}{%
-    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-  },
-  photon/.style={decorate, decoration={snake, segment length=3mm, amplitude=0.8mm}},
+  -<-/.default=.5,
 }
 
-% arrows on the field lines
-\tikzstyle directed=[postaction={decorate,decoration={markings,
-  mark=at position .2 with {\arrowreversed[scale=1.5]{>}},
-  mark=at position .8 with {\arrowreversed[scale=1.5]{>}}}}]
-
-% field lines
-\tikzstyle fLines=[thick,directed]
-
-\tikzset{xcenter around/.style 2 args={execute at end picture={%
-  \useasboundingbox let \p0 = (current bounding box.south west), \p1 = (current bounding box.north east),
-                        \p2 = (#1), \p3 = (#2)
-                    in
-        ({min(\x2 + \x3 - \x1,\x0)},\y0) rectangle ({max(\x3 + \x2 - \x0,\x1)},\y1);
-}}}
+\tikzstyle{block} = [rectangle, draw, text width=7em, text centered, minimum height=2em]
 
 \lstset{
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
@@ -105,49 +85,6 @@
 \newcommand{\SM}{\text{SM}}
 \newcommand{\SPheno}{\texttt{SPheno}}
 \newcommand{\TSESM}{\text{TSESM}}
-
-\newcommand{\SMtable}{%
-    \begin{tikzpicture}[node distance = 2.5em, auto]
-      \node[quark] (u) {$u$};
-      \node[quark, below of=u] (d) {$d$};
-      \node[quark, right of=u] (c) {$c$};
-      \node[quark, below of=c] (s) {$s$};
-      \node[quark, right of=c] (t) {$t$};
-      \node[quark, below of=t] (b) {$b$};
-      \node[lepton, below of=d] (ne) {$\nu_e$};
-      \node[lepton, below of=ne] (e) {$e$};
-      \node[lepton, right of=ne] (nm) {$\nu_\mu$};
-      \node[lepton, below of=nm] (m) {$\mu$};
-      \node[lepton, right of=nm] (nt) {$\nu_\tau$};
-      \node[lepton, below of=nt] (ta) {$\tau$};
-      \node[gauge, right of=t] (gamma) {$\gamma$};
-      \node[gauge, below of=gamma] (g) {$g$};
-      \node[gauge, below of=g] (Z) {$Z$};
-      \node[gauge, below of=Z] (W) {$W$};
-      \node[scalar, right of=W] (H) {$h$};
-      \node[rotate=90] (quarks)  at ($(u)!0.5!(d)+(-1,0)$)  {quarks};
-      \node[rotate=90] (leptons) at ($(ne)!0.5!(e)+(-1,0)$) {leptons};
-      \node[below of=H] (higgs) {Higgs};
-      \node[above of=gamma, align=center] (gauge) {gauge\\[-0.5em] bosons};
-    \end{tikzpicture}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\tikzstyle{block} = [rectangle, draw, text width=7em, text centered, minimum height=2em]
-
-\tikzstyle{quark}     = [rectangle, black, draw, fill=yellow, minimum width=2em, text centered, minimum height=2em]
-\tikzstyle{lepton}    = [rectangle, black, draw, fill=red!50, minimum width=2em, text centered, minimum height=2em]
-\tikzstyle{gauge}     = [circle   , black, draw, fill=green , minimum size=2em, inner sep=0pt, text centered]
-\tikzstyle{scalar}    = [diamond  , black, draw, fill=blue!40, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
-\tikzstyle{goldstone} = [diamond  , black, draw, dashed, fill=blue!30, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
-\tikzstyle{squark}    = [diamond  , black, draw, fill=yellow, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
-\tikzstyle{slepton}   = [diamond  , black, draw, fill=red!50, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
-\tikzstyle{gaugino}   = [rectangle, black, draw, fill=green , minimum size=2em, inner sep=0pt, text centered]
-\tikzstyle{higgsino}  = [rectangle, black, draw, fill=blue!40  , minimum width=2em, text centered, minimum height=2em]
-\tikzstyle{inert}     = [diamond  , black, draw, fill=teal!80, minimum width=2.3em, text centered, minimum height=2.3em, inner sep=0pt]
-\tikzstyle{inertino}  = [rectangle, black, draw, fill=teal!80, minimum width=2em, text centered, minimum height=2em]
-\tikzstyle{phantom}   = [rectangle, black, minimum width=2em, text centered, minimum height=2em]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -408,6 +345,26 @@ $ less SPheno.spc.SM\end{lstlisting}
 
 \begin{frame}{Table of Contents}
   \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- spectrum generator}
+  \begin{center}
+    \begin{tikzpicture}
+      \pgfmathsetmacro{\Qdist}{1};
+      \node[block] (LowScaleInput) { fixing $g_i$, $Y_f$, $v$ from $\alpha_{\text{em}}$, $\alpha_s$, $G_F$, $m_f$, $M_Z$ };
+      \node[block,above=1cm of LowScaleInput] (SUSYScaleInput) { fixing $\mu^2$, $M_S^2$ from EWSB };
+      \node[block,above=1cm of SUSYScaleInput] (HighScaleInput) { fixing $\lambda$, $\lambda_S$, $\lambda_{SH}$, $\kappa_S$, $\kappa_{SH}$ from input };
+      %
+      \draw[<->] (LowScaleInput) -- node[right] {RG running} (SUSYScaleInput);
+      \draw[<->] (SUSYScaleInput) -- node[right] {RG running} (HighScaleInput);
+      \draw[->] ($(LowScaleInput.south west)+(-\Qdist,0)$) -- ($(HighScaleInput.north west)+(-\Qdist,0)$) node[above] {$Q$};
+      \draw[] ($(LowScaleInput.west)+(-1.1*\Qdist,0)$) node[left] {$M_Z$} -- ($(LowScaleInput.west)+(-0.9*\Qdist,0)$);
+      \draw[] ($(SUSYScaleInput.west)+(-1.1*\Qdist,0)$) node[left] {$Q_{\text{EWSB}}$} -- ($(SUSYScaleInput.west)+(-0.9*\Qdist,0)$);
+      \draw[] ($(HighScaleInput.west)+(-1.1*\Qdist,0)$) node[left] {$Q_{\text{in}}$} -- ($(HighScaleInput.west)+(-0.9*\Qdist,0)$);
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
