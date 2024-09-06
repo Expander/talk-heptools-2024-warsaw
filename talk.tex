@@ -1026,7 +1026,7 @@ $ less SPheno.spc.SESM\end{lstlisting}%$
   As a second example, let us consider an extension of the SESM by
   another real scalar gauge singlet. The model should be called Two
   Singlet Extension of the Standard Model (\TSESM). The Lagrangian
-  should have a global $Z_2$ symmetry with all non-SM fields having
+  should have a global $Z_2$ symmetry with all non-SESM fields having
   $Z_2$ charge $-1$:
   %
   \begin{equation*}
@@ -1036,9 +1036,9 @@ $ less SPheno.spc.SESM\end{lstlisting}%$
   We will proceed as follows:
   %
   \begin{enumerate}
-  \item Create a \SARAH\ model file for the SESM
-  \item Create a \FlexibleSUSY\ model file for the SESM
-  \item Create a \micrOMEGAs\ model file for the SESM
+  \item Create a \SARAH\ model file for the TSESM
+  \item Create a \FlexibleSUSY\ model file for the TSESM
+  \item Create a \micrOMEGAs\ model file for the TSESM
   \item Run \FlexibleSUSY\ and pass the output to \micrOMEGAs\ to
     calculate the dark matter relic abundance $\Omega h^2$.
   \end{enumerate}
@@ -1051,7 +1051,7 @@ $ less SPheno.spc.SESM\end{lstlisting}%$
 
   \medskip
 
-  1. Add a global $Z_2$ symmetry and assign the charge $+1$ to each SM
+  1. Add a global $Z_2$ symmetry and assign the charge $+1$ to each SESM
   field:
   %
   \begin{lstlisting}
@@ -1067,80 +1067,29 @@ FermionFields[[3]] = {..., 1};
 FermionFields[[4]] = {..., 1};
 FermionFields[[5]] = {..., 1};
 
-ScalarFields[[1]] =  {..., 1};\end{lstlisting}
+ScalarFields[[1]] = {..., 1};
+ScalarFields[[2]] = {..., 1};\end{lstlisting}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
   %
-  2. Add the new scalar field with $Z_2$ charge $-1$:
+  2. Add the new scalar field $\tilde{s}$ with $Z_2$ charge $-1$:
   %
   \begin{lstlisting}
-ScalarFields[[2]] = {s, 1, Sing, 0, 1, 1, -1};
-RealScalars = {s};\end{lstlisting}
+ScalarFields[[3]] = {ts, 1, TSing, 0, 1, 1, -1};
+RealScalars = {s, ts};\end{lstlisting}
   %
   3. Extend the Lagrangian:
   %
   \begin{lstlisting}
 LagNoHC = -(
-    + mu2 conj[H].H
-    + \[Lambda]/2 conj[H].H.conj[H].H
-    + LamSH/2 conj[H].H.s.s
-    + MS2/2 s.s
-    + LamS/2 s.s.s.s
+    ...
+    + TLamSH/2 conj[H].H.ts.ts
+    + TMS2/2 ts.ts
+    + TLamS/2 ts.ts.ts.ts
 );\end{lstlisting}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
-  4. Give a VEV to the new (real) singlet:
-  %
-  \begin{equation*}
-    s = v_S + \phi_S
-  \end{equation*}
-  %
-  \begin{lstlisting}
-DEFINITION[EWSB][VEVs] = {
-  {H0, {v, 1/Sqrt[2]},
-       {Ah, \[ImaginaryI]/Sqrt[2]},
-       {phiH, 1/Sqrt[2]} },
-  {Sing, {vS, 1},
-         {0, 0},
-         {phiS, 1}
-};\end{lstlisting}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]{\insertsection\ -- SARAH -- model file}
-  5. Mix $\phi_S$ with $\phi_H$:
-  %
-  \begin{equation*}
-    \begin{pmatrix}
-      h_1 \\ h_2
-    \end{pmatrix}
-    =
-    Z_H
-    % \begin{pmatrix}
-    %   (Z_H)_{11} & (Z_H)_{12} \\
-    %   (Z_H)_{21} & (Z_H)_{22}
-    % \end{pmatrix}
-    \begin{pmatrix}
-      \phi_H \\ \phi_S
-    \end{pmatrix},
-    \qquad
-    Z_H^T = Z_H
-  \end{equation*}
-  %
-  \begin{lstlisting}
-DEFINITION[EWSB][MatterSector] = {
-  {{phiH, phiS}, {hh, ZH}},
-  {{{dL}, {conj[dR]}}, {{DL,Vd}, {DR,Ud}}},
-  {{{uL}, {conj[uR]}}, {{UL,Vu}, {UR,Uu}}},
-  {{{eL}, {conj[eR]}}, {{EL,Ve}, {ER,Ue}}}
-};\end{lstlisting}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
