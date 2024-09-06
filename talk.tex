@@ -354,8 +354,8 @@ $ less SPheno.spc.SM\end{lstlisting}
     \begin{tikzpicture}
       \pgfmathsetmacro{\Qdist}{1};
       \node[block] (LowScaleInput) { fixing $g_i$, $Y_f$, $v$ from $\alpha_{\text{em}}$, $\alpha_s$, $G_F$, $m_f$, $M_Z$ };
-      \node[block,above=1cm of LowScaleInput] (SUSYScaleInput) { fixing $\mu^2$, $M_S^2$ from EWSB };
-      \node[block,above=1cm of SUSYScaleInput] (HighScaleInput) { fixing $\lambda$, $\lambda_S$, $\lambda_{SH}$, $\kappa_S$, $\kappa_{SH}$ from input };
+      \node[block,above=1cm of LowScaleInput] (SUSYScaleInput) { fixing $\mu^2$ from EWSB };
+      \node[block,above=1cm of SUSYScaleInput] (HighScaleInput) { fixing $\lambda$ from input };
       %
       \draw[<->] (LowScaleInput) -- node[right] {RG running} (SUSYScaleInput);
       \draw[<->] (SUSYScaleInput) -- node[right] {RG running} (HighScaleInput);
@@ -716,6 +716,26 @@ In[]:= Quit[]'\end{lstlisting}%$
 
 \begin{frame}{Table of Contents}
   \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- spectrum generator}
+  \begin{center}
+    \begin{tikzpicture}
+      \pgfmathsetmacro{\Qdist}{1};
+      \node[block] (LowScaleInput) { fixing $g_i$, $Y_f$, $v$ from $\alpha_{\text{em}}$, $\alpha_s$, $G_F$, $m_f$, $M_Z$ };
+      \node[block,above=1cm of LowScaleInput] (SUSYScaleInput) { fixing $\mu^2$, $M_S^2$ from EWSB };
+      \node[block,above=1cm of SUSYScaleInput] (HighScaleInput) { fixing $\lambda$, $\lambda_S$, $\lambda_{SH}$, $\kappa_S$, $\kappa_{SH}$ from input };
+      %
+      \draw[<->] (LowScaleInput) -- node[right] {RG running} (SUSYScaleInput);
+      \draw[<->] (SUSYScaleInput) -- node[right] {RG running} (HighScaleInput);
+      \draw[->] ($(LowScaleInput.south west)+(-\Qdist,0)$) -- ($(HighScaleInput.north west)+(-\Qdist,0)$) node[above] {$Q$};
+      \draw[] ($(LowScaleInput.west)+(-1.1*\Qdist,0)$) node[left] {$M_Z$} -- ($(LowScaleInput.west)+(-0.9*\Qdist,0)$);
+      \draw[] ($(SUSYScaleInput.west)+(-1.1*\Qdist,0)$) node[left] {$Q_{\text{EWSB}}$} -- ($(SUSYScaleInput.west)+(-0.9*\Qdist,0)$);
+      \draw[] ($(HighScaleInput.west)+(-1.1*\Qdist,0)$) node[left] {$Q_{\text{in}}$} -- ($(HighScaleInput.west)+(-0.9*\Qdist,0)$);
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
