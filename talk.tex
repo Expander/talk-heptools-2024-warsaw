@@ -83,6 +83,7 @@
 \newcommand{\SARAH}{\texttt{SARAH}}
 \newcommand{\SESM}{\text{SESM}}
 \newcommand{\SM}{\text{SM}}
+\newcommand{\SModelS}{\text{SModelS}}
 \newcommand{\SPheno}{\texttt{SPheno}}
 \newcommand{\TSESM}{\text{TSESM}}
 
@@ -996,6 +997,7 @@ $ less SPheno.spc.SESM\end{lstlisting}%$
   \item Create a \micrOMEGAs\ model file for the TSESM
   \item Run \FlexibleSUSY\ and pass the output to \micrOMEGAs\ to
     calculate the dark matter relic abundance $\Omega h^2$ etc.
+  \item Pass the SLHA output of \micrOMEGAs\ to \SModelS.
   \end{enumerate}
 \end{frame}
 
@@ -1262,7 +1264,7 @@ Block MASS
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- run}
+\begin{frame}[fragile]{\insertsection\ -- micrOMEGAs}
   Our plan is now to pass the \FlexibleSUSY\ output to \micrOMEGAs.
 
   \medskip
@@ -1281,7 +1283,7 @@ In[]:= Quit[]\end{lstlisting}%$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- run}
+\begin{frame}[fragile]{\insertsection\ -- micrOMEGAs}
   2. We go to the \micrOMEGAs\ directory and setup the new TSESM
   model:
   %
@@ -1295,7 +1297,7 @@ $ make main=main.cpp\end{lstlisting}%$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{\insertsection\ -- FlexibleSUSY -- run}
+\begin{frame}[fragile]{\insertsection\ -- micrOMEGAs}
   3. We run FlexibleSUSY and place the SLHA output in the current
   directory with the name \texttt{SPheno.spc.TSESM}
   %
@@ -1310,6 +1312,41 @@ $ ${FS}/models/TSESM/run_TSESM.x \
   %
   \begin{lstlisting}
 $ ./main data.par\end{lstlisting}%$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{SModelS}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Table of Contents}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SModelS}
+  Our plan is now to pass the \micrOMEGAs\ SLHA output to \SModelS.
+
+  \bigskip
+
+  In order to generate an SLHA output from \micrOMEGAs, we have to
+  add the following line to
+  \texttt{$\sim$/hep-software/micromegas\_6.1.15/TSESM/main.cpp}:
+  %
+  \begin{lstlisting}
+smodels(LHC8+LHC13, 5, 0.,
+   const_cast<char*>("smodels.slha"),
+   const_cast<char*>("3.0.0"), 0);\end{lstlisting}%$
+  %
+  We re-compile \micrOMEGAs\ and re-run the point:
+  %
+  \begin{lstlisting}
+$ make main=main.cpp
+$ ./main data.par\end{lstlisting}%$
+  %
+  The SLHA output has now been written to \texttt{smodels.slha}.
 \end{frame}
 
 \end{document}
