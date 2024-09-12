@@ -1349,4 +1349,22 @@ $ ./main data.par\end{lstlisting}%$
   The SLHA output has now been written to \texttt{smodels.slha}.
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{\insertsection\ -- SModelS}
+  W.\ Kotlarski has prepared a custom program under\\
+  {\small\url{https://github.com/Expander/material-heptools-2024-warsaw/blob/main/TSESM/CalcOmega-1DM.cpp}}\\
+  Compile and run it as follows:
+  %
+  \begin{lstlisting}
+cd ~/hep-software/micromegas_6.1.15
+mkdir nlohmann && cd nlohmann
+wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp
+cd -
+make main=CalcOmega-1DM.cpp
+./CalcOmega-1DM\end{lstlisting}%$
+  %
+  The SLHA output has now been written to \texttt{smodels.slha}.
+\end{frame}
+
 \end{document}
